@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AudioProcessing</title>
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{% static 'audioprocessing/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'audio_compression/css/compression.css' %}">
+        <link rel="stylesheet" href="{% static 'abnormal_noise_detection/css/noise_detection.css' %}">
+        <link rel="stylesheet" href="{% static 'audio_noise_reduction/css/noise_reduction.css' %}">
+    </head>
+    <body>
+        <!-- Include Navbar -->
+        {% include 'navbar.html' %}
+        
+
+        <div class="container">
+            {% block content %}
+                <!-- Content will be inserted here (since index.html for example) -->
+            {% endblock %}
+        </div>
+        
+        
+        <!-- Include Footer -->
+        {% include 'footer.html' %}
+
+        <!-- Bootstrap JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
