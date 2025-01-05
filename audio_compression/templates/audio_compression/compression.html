@@ -1,38 +1,50 @@
 {% extends 'base.html' %}
-{% load custom_filters %}
 {% load static %}
-
 {% block content %}
-    <h1 class="text-center compression">Compression Audio</h1>
+<h1 class="text-center compression">Compression Audio</h1></br>
 
-    <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
         <label for="audio_file">Choisir un fichier audio :</label>
         <input type="file" id="audio_file" name="audio_file" accept=".wav" required>
-        <button type="submit">Compresser</button>
-    </form>
-
-    {% if compression_info %}
-    <div class="text-center">
-        <h2>Informations de compression :</h2>
-        <p>Taille initiale : {{ compression_info.original_size|bytes_to_mb }} MB</p>
-        <p>Taille finale : {{ compression_info.filtered_size|bytes_to_mb }} MB</p>
-        <p>Pourcentage de compression : {{ compression_info.compression_ratio|floatformat:2 }}%</p>
-        
-        <h3>Audio original :</h3>
-        <audio controls>
-            <source src="{{ original_file_url }}" type="audio/wav">
-            Votre navigateur ne supporte pas la lecture audio.
-        </audio>
-        
-
-        <h3>Audio compressé :</h3>
-        <audio controls>
-            <source src="{{ compressed_file_url }}" type="audio/wav">
-            Votre navigateur ne supporte pas la lecture audio.
-        </audio>
-        
-        <a href="{{ compressed_file_url }}" class="btn btn-success" download>Télécharger le fichier compressé</a>
+        <button type="submit" class="btn btn-primary">Compresser</button>
+    </br></br></br>
     </div>
-    {% endif %}
+
+    <div class="form-group">
+        <label>Choisissez la fréquence de coupure :</label>
+        <div class="freq-buttons">
+            <button type="button" class="freq-button {% if default_frequency == 1000 %}selected{% endif %}" data-value="1000">Original (Inchangé)</button>
+            <button type="button" class="freq-button" data-value="500">500 Hz</button>
+            <button type="button" class="freq-button" data-value="1000">1000 Hz</button>
+            <button type="button" class="freq-button" data-value="2000">2000 Hz</button>
+            <button type="button" class="freq-button" data-value="3000">3000 Hz</button>
+        </div>
+        <input type="hidden" id="cutoff_frequency" name="cutoff_frequency" value="{{ default_frequency }}">
+    </div>
+</form>
+
+{% if compression_info %}
+<div class="text-center">
+    <h2>Informations de compression :</h2>
+    <p>Taille initiale : {{ compression_info.original_size }} octets</p>
+    <p>Taille finale : {{ compression_info.filtered_size }} octets</p>
+    <p>Pourcentage de compression : {{ compression_info.compression_ratio|floatformat:2 }}%</p>
+
+    <h3>Audio original :</h3>
+    <audio controls>
+        <source src="{{ original_file_url }}" type="audio/wav">
+        Votre navigateur ne supporte pas la lecture audio.
+    </audio>
+
+    <h3>Audio compressé :</h3>
+    <audio controls>
+        <source src="{{ compressed_file_url }}" type="audio/wav">
+        Votre navigateur ne supporte pas la lecture audio.
+    </audio>
+
+    <a href="{{ compressed_file_url }}" class="btn btn-success" download>Télécharger le fichier compressé</a>
+</div>
+{% endif %}
 {% endblock %}
