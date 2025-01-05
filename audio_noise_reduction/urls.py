@@ -1,6 +1,6 @@
 from django.urls import path
-from django.views.generic import TemplateView
+from . import views
 
 urlpatterns = [
-    path('noise-reduction/', TemplateView.as_view(template_name='audio_noise_reduction/noise_reduction.html'), name='noise-reduction')
+    path('noise-reduction/', views.noise_reduction, name='noise_reduction'),
 ]

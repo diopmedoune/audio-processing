@@ -1,6 +1,47 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
-    <h1 class="text-center noise-reduction">Noise Reduction Page</h1>
+<div class="container mt-5">
+    <h1>Réduction de Bruit Audio</h1>
+
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="audio_file" class="form-label">Choisissez un fichier audio</label>
+            <input type="file" class="form-control" id="audio_file" name="audio_file" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="method" class="form-label">Méthode de réduction de bruit</label>
+            <select class="form-select" id="method" name="method" required>
+                <option value="fft">FFT</option>
+                <option value="adaptive">Filtrage Adaptatif</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Traiter</button>
+    </form>
+
+    {% if original_file_url %}
+    <div class="mt-5">
+        <h3>Fichier Original</h3>
+        <audio controls>
+            <source src="{{ original_file_url }}" type="audio/wav">
+            Votre navigateur ne supporte pas l'élément audio.
+        </audio>
+        <p><a href="{{ original_file_url }}" class="btn btn-secondary" download>Télécharger le fichier original</a></p>
+    </div>
+    {% endif %}
+
+    {% if processed_file_url %}
+    <div class="mt-5">
+        <h3>Fichier Traité</h3>
+        <audio controls>
+            <source src="{{ processed_file_url }}" type="audio/wav">
+            Votre navigateur ne supporte pas l'élément audio.
+        </audio>
+        <p><a href="{{ processed_file_url }}" class="btn btn-success" download>Télécharger le fichier traité</a></p>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
