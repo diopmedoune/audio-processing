@@ -1,16 +1,34 @@
+import numpy as np
 import librosa
 import soundfile as sf
-import numpy as np
+from scipy.signal import wiener
 
-def reduce_noise_fft(input_file, output_file):
+# Méthode 1 : Filtrage fréquentiel (FFT)
+def fft_filter(input_file, output_file, cutoff=1000):
+    """
+    Réduction de bruit avec filtrage fréquentiel (FFT)
+    :param input_file: Chemin du fichier d'entrée
+    :param output_file: Chemin du fichier de sortie
+    :param cutoff: Fréquence de coupure pour le filtre passe-bas (en Hz)
+    """
     y, sr = librosa.load(input_file, sr=None)
-    y_fft = np.fft.rfft(y)
-    y_fft[np.abs(y_fft) < 0.1 * max(np.abs(y_fft))] = 0
-    y_filtered = np.fft.irfft(y_fft)
-    sf.write(output_file, y_filtered, sr)
+    fft_audio = np.fft.fft(y)
+    freqs = np.fft.fftfreq(len(y), 1 / sr)
 
-def reduce_noise_adaptive(input_file, output_file):
+    # filtre passe-bas
+    fft_audio[np.abs(freqs) > cutoff] = 0
+    filtered_audio = np.fft.ifft(fft_audio).real
+    sf.write(output_file, filtered_audio, sr)
+
+# Méthode 2 : Filtre adaptatif (Wiener)
+def wiener_filter(input_file, output_file, window_size=11):
+    """
+    Réduction de bruit avec filtre adaptatif (Wiener)
+    :param input_file: Chemin du fichier d'entrée
+    :param output_file: Chemin du fichier de sortie
+    :param window_size: Taille de la fenêtre pour le filtre Wiener
+    """
     y, sr = librosa.load(input_file, sr=None)
-    noise_profile = np.mean(y[:int(0.5 * sr)])  # Supposons que le bruit est dans les 0.5 premières secondes
-    y_denoised = y - noise_profile
-    sf.write(output_file, y_denoised, sr)
+    # filtre Wiener
+    filtered_audio = wiener(y, mysize=window_size)
+    sf.write(output_file, filtered_audio, sr)
