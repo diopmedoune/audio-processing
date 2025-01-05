@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Résultats de l'analyse audio</h1>
+<img src="data:image/png;base64,{{ chart }}" alt="Graphique audio" width="1000">
+<br>
+<a href="{% url 'noise-detection' %}">Téléverser un autre fichier</a>
+{% endblock %}

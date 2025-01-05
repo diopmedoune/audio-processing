@@ -1,6 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
+from . import views
 
 urlpatterns = [
-    path('noise-detection/', TemplateView.as_view(template_name='abnormal_noise_detection/noise_detection.html'), name='noise-detection')
+    path('noise-detection/', views.upload_and_detect, name='noise-detection')
 ]
