@@ -1,3 +1,21 @@
 body {
-    background-color: lightblue; /* Just to show that css is working */
+    background-color: rgb(221, 236, 218); /* Just to show that css is working */
+}
+.choices{
+    width: 50%;
+    background-color: rgba(86, 195, 168, 0.71);
+}
+.choices:hover{
+    background-color: #F1BAA1;
+}
+.text_t{
+    font-weight:500;
+    color: black;
+    font-size: 20px;
+}
+.chevron{
+    color: black;
+}
+.btn{
+    border: none !important;
 }

@@ -1,0 +1,10 @@
+nav{
+    background-color: #56c3a8b5 !important;
+}
+nav > div > div > div > a:hover{
+    font-weight: bold;
+    color: rgb(80, 80, 80) !important;
+}
+nav > div > a:hover{
+    font-weight: bold;
+}

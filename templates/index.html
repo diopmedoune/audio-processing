@@ -2,8 +2,43 @@
 {% load static %}
 
 {% block content %}
-    <h1 class="text-center">AudioProcessing</h1>
-    <p><a href="compression">Page compresson</a></p>
-    <p><a href="noise-reduction">Page Débruitage</a></p>
-    <p><a href="noise-detection">Page Bruit anormal </a></p>
+    <h2 class="mt-5 text-center">Un outil puissant pour vous faciliter la manipulation de vos audios</h2>
+    <div class="corp_p mt-5 d-flex justify-content-center"><img class="rounded-4" src="{% static 'img/image_signal.jpg'%}" width="1000" height="200" alt="image de son"></div>
+    <h2 class="text-center my-5">Les fonctionnalités disponibles</h2>
+    <div class="d-flex justify-content-between flex-column text-center align-items-center my-5">
+        <div class="choices text-start rounded-4 my-2 pt-2 d-flex justify-content-between">
+            <button class="btn ps-4 text-start" onclick="window.location.href='{% url 'compression' %}'">
+                <p class="text_t">Compresser un son</p>
+                <p>Réduisez la taille de vos fichiers volumineux </p>
+            </button>
+            <button class="pe-4 btn d-flex align-items-center chevron" onclick="window.location.href='{% url 'compression' %}'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671"/>
+                  </svg>
+            </button>
+        </div>
+        <div class="choices text-start rounded-4 my-2 pt-2 d-flex justify-content-between">
+            <button class="btn ps-4 text-start" onclick="window.location.href='{% url 'noise_reduction' %}'">
+                <p class="text_t">Débruiter un son</p>
+                <p>Rendez vos son plus audibles en supprimant tous les bruits </p>
+            </button>
+            <button class="btn pe-4 d-flex align-items-center chevron" onclick="window.location.href='{% url 'noise_reduction' %}'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671"/>
+                  </svg>
+            </button>
+        </div>
+        <div class="choices text-start rounded-4 my-2 pt-2 d-flex justify-content-between">
+            <button class="ps-4 btn text-start" onclick="window.location.href='{% url 'noise-detection' %}'">
+                <p class="text_t">Détecter une anomalie</p>
+                <p>Détectez les parties anormaux de vos sons </p>
+            </button>
+            <button class="btn pe-4 d-flex align-items-center chevron" onclick="window.location.href='{% url 'noise-detection' %}'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671"/>
+                  </svg>
+            </button>
+        </div>
+    </div>
+    </div>
 {% endblock %}

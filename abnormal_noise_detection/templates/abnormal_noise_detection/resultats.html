@@ -3,7 +3,7 @@
 
 {% block content %}
 <h1>Résultats de l'analyse audio</h1>
-<img src="data:image/png;base64,{{ chart }}" alt="Graphique audio" width="1000">
+<img src="data:image/png;base64,{{ chart }}" alt="Graphique audio" style="width: 85vw;">
 <br>
-<a href="{% url 'noise-detection' %}">Téléverser un autre fichier</a>
+<a class="btn btn-lg btn-danger my-4" href="{% url 'noise-detection' %}">Téléverser un autre fichier</a>
 {% endblock %}

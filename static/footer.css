@@ -1,0 +1,15 @@
+footer > div{
+    background-color: rgba(86, 195, 168, 0.71) !important;
+}
+.footer_l{
+    flex: 2;
+}
+.footer_r{
+    flex: 3;
+}
+.footer_r > div > a, .footer_l{
+    color: black;
+}
+.footer_r > div > a:hover{
+    color: rgb(80, 80, 80);
+}
