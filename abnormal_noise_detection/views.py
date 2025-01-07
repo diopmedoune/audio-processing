@@ -12,9 +12,9 @@ import io
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 def convert_to_wav(audio_data):
-    audio_file = io.BytesIO(audio_data)
+    audio_files = io.BytesIO(audio_data)
     # Utiliser pydub pour charger et convertir en WAV
-    audio_segment = AudioSegment.from_file(audio_file)
+    audio_segment = AudioSegment.from_file(audio_files)
     audio_wav = io.BytesIO()
     audio_segment.export(audio_wav, format="wav")
     audio_wav.seek(0)  # Repositionner le pointeur de lecture au début du fichier WAV
@@ -23,14 +23,14 @@ def convert_to_wav(audio_data):
 def upload_and_detect(request):
     if request.method == 'POST':
         form = AudioUploadForm(request.POST, request.FILES)
-        if 'audio_file' in request.FILES:
+        if 'audio_files' in request.FILES:
             if form.is_valid():
-                audio_file = request.FILES['audio_file']
+                audio_files = request.FILES['audio_files']
 
                 threshold = form.cleaned_data['threshold']
 
                 try:
-                    sample_rate, audio = read(audio_file)
+                    sample_rate, audio = read(audio_files)
                     if len(audio.shape) > 1:
                         audio = np.mean(audio, axis=1)
 
@@ -59,19 +59,19 @@ def upload_and_detect(request):
             
             # Décoder l'audio depuis base64
             audio_data = base64.b64decode(audio_data)
-            audio_file = BytesIO(audio_data)
+            audio_files = BytesIO(audio_data)
             
 
             try:
                 # Vérifiez que le fichier est bien un WAV en lisant l'entête
-                header = audio_file.read(4)
-                audio_file.seek(0)  # Remettez le pointeur au debut
+                header = audio_files.read(4)
+                audio_files.seek(0)  # Remettez le pointeur au debut
 
                 if header not in [b'RIFF', b'RIFX']:
                     raise ValueError("Le fichier fourni n'est pas un fichier WAV valide.")
 
                 # Lire le fichier WAV avec scipy
-                sample_rate, audio = read(audio_file)
+                sample_rate, audio = read(audio_files)
 
                 # Si l'audio est stéréo, le convertir en mono
                 if len(audio.shape) > 1:
