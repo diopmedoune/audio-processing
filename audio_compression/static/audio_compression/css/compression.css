@@ -1,25 +1,192 @@
-.compression {
-    background-color: blue;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
 }
 
-.freq-buttons {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
+main {
+    padding: 1rem;
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.freq-button {
-    padding: 10px 20px;
-    background-color: #007bff;
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin: 0.5rem 0;
+    font-weight: bold;
+}
+
+input[type="file"] {
+    margin: 0.5rem 0;
+    padding: 3px;
+    border-radius: 1%;
+}
+.input_btn {
+    border: 1px solid rgb(184, 181, 181);
+    display: flex;
+    flex-direction: row;
+    padding: 3px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 3%;
+}
+.options {
+    margin-top: 25px;
+    border: 1px solid rgb(58, 56, 56);
+    padding: 10px;
+    border-radius: 2%;
+}
+.freq-radios {
+    background-color: #F1BAA1;
+    padding: 10px;
+    border-radius: 2%;
+    margin-top: 7px;
+}
+.freq-radios label {
+    display: block;
+    margin: 0.5rem 0;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.btn {
+    display: block;
+    background-color: #AA1803;
     color: white;
+    text-align: center;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+.btn:hover {
+    background-color: #56c3a8b5;
+}
+audio {
+    display: block;
+    margin: 1rem 0;
+    width: 100%;
+}
+.form-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.form-inline label {
+    white-space: nowrap; 
+}
+
+.form-inline input[type="file"] {
+    flex: 1;
+}
+
+.aelect-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 5px;
+    width: 100%;
+    max-width: 610px;
+    border-radius: 5px;
+}
+
+.aselect-container label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.aselect-container select {
+    padding: 8px;
+    width: 100%;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.format_audio {
+    background-color: #F1BAA1 !important;
+}
+.compression-info-container {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    margin: 8px auto;
+}
+
+.compression-info-container h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.compression-info-container p {
+    font-size: 1em;
+    color: #555;
+    margin: 8px 0;
+}
+
+.audio-container {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    max-width: 600px;
+    margin: 16px auto;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.audio-container h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.audio-container audio {
+    display: block;
+    margin: 12px auto;
+    width: 100%;
+    max-width: 500px;
+}
+.results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn.telecharger {
+    display: inline-block;
+    background-color: #AA1803;
+    color: #fff;
     font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-bottom: 30px;
 }
-.freq-button:hover {
-    background-color: #0056b3;
-}
-.freq-button.selected {
-    background-color: #28a745;
+
+.btn.telecharger:hover {
+    background-color: #56c3a8b5;
 }

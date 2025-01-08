@@ -1,50 +1,60 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block content %}
-<h1 class="text-center compression">Compression Audio</h1></br>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="audio_file">Choisir un fichier audio :</label>
-        <input type="file" id="audio_file" name="audio_file" accept=".wav" required>
-        <button type="submit" class="btn btn-primary">Compresser</button>
-    </br></br></br>
-    </div>
-
-    <div class="form-group">
-        <label>Choisissez la fréquence de coupure :</label>
-        <div class="freq-buttons">
-            <button type="button" class="freq-button {% if default_frequency == 1000 %}selected{% endif %}" data-value="1000">Original (Inchangé)</button>
-            <button type="button" class="freq-button" data-value="500">500 Hz</button>
-            <button type="button" class="freq-button" data-value="1000">1000 Hz</button>
-            <button type="button" class="freq-button" data-value="2000">2000 Hz</button>
-            <button type="button" class="freq-button" data-value="3000">3000 Hz</button>
+<main>
+    <h1>Compresser Audio</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h4>Téléversez un audio et cliquez sur compresser !</h4>
+        <div class="form-inline">
+           <span class="input_btn" >
+            <input type="file" id="audio_file" name="audio_file" accept=".wav" required>
+            <button type="submit" class="btn">
+                Compresser <i class="fas fa-arrow-right"></i>
+            </button>
+        </span>
         </div>
-        <input type="hidden" id="cutoff_frequency" name="cutoff_frequency" value="{{ default_frequency }}">
-    </div>
-</form>
+        
+        <div class="options">
+            <h4>
+                <i class="fas fa-cogs" style="font-size: 20px; margin-right: 8px;"></i>
+                OPTIONS
+            </h4>
+            <p>Configurer ces options est facultatif. Les valeurs par défaut conviennent dans la plupart des cas.</p>
+            
+            <div class"format_audio">
+                <div class="aselect-container">
+                    <label for="output_format">Format du fichier de sortie :</label>
+                    <select id="output_format" name="output_format">
+                        <option value="WAV">WAV</option>
+                        <option value="MP3">MP3</option>
+                    </select>
+                </div>
+            </div>
 
-{% if compression_info %}
-<div class="text-center">
-    <h2>Informations de compression :</h2>
-    <p>Taille initiale : {{ compression_info.original_size }} octets</p>
-    <p>Taille finale : {{ compression_info.filtered_size }} octets</p>
-    <p>Pourcentage de compression : {{ compression_info.compression_ratio|floatformat:2 }}%</p>
-
-    <h3>Audio original :</h3>
-    <audio controls>
-        <source src="{{ original_file_url }}" type="audio/wav">
-        Votre navigateur ne supporte pas la lecture audio.
-    </audio>
-
-    <h3>Audio compressé :</h3>
-    <audio controls>
-        <source src="{{ compressed_file_url }}" type="audio/wav">
-        Votre navigateur ne supporte pas la lecture audio.
-    </audio>
-
-    <a href="{{ compressed_file_url }}" class="btn btn-success" download>Télécharger le fichier compressé</a>
-</div>
-{% endif %}
+            <div class="freq-radios">
+                <h3>Fréquence de coupure :</h3>
+                <label>
+                    <input type="radio" name="cutoff_frequency" value="1000" {% if default_frequency == 1000 %}checked{% endif %}>
+                    1000 Hz
+                </label>
+                <label>
+                    <input type="radio" name="cutoff_frequency" value="4000" {% if default_frequency == 2000 %}checked{% endif %}>
+                    4000 Hz
+                </label>
+                <label>
+                    <input type="radio" name="cutoff_frequency" value="8000" {% if default_frequency == 3000 %}checked{% endif %}>
+                    8000 Hz
+                </label>                <label>
+                    <input type="radio" name="cutoff_frequency" value="12000" {% if default_frequency == 3000 %}checked{% endif %}>
+                    12000 Hz
+                </label>                <label>
+                    <input type="radio" name="cutoff_frequency" value="16000" {% if default_frequency == 3000 %}checked{% endif %}>
+                    16000 Hz
+                </label>
+            </div>
+        </div>
+    </form>
+</main>
 {% endblock %}

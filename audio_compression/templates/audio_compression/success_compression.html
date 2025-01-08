@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="results">
+    <div class="compression-info-container">
+        <h2>Informations sur la compression :</h2>
+        <p>Taille Initiale : {{ compression_info.original_size | bytes_to_mb }} MB</p>
+        <p>Taille Finale : {{ compression_info.filtered_size | bytes_to_mb }} MB</p>
+        <p>Ratio : {{ compression_info.compression_ratio | floatformat:2 }}%</p>
+    </div>
+    
+
+    <div class="audio-container">
+        <h2>Audio Initial</h2>
+        <audio controls>
+            <source src="{{ original_file_url }}" type="audio/wav">Original
+        </audio>
+    
+        <h2>Audio Compressé</h2>
+        <audio controls>
+            <source src="{{ compressed_file_url }}" type="audio/wav">Compressé
+        </audio>
+    </div>
+    
+
+    <a href="{{ compressed_file_url }}" class="btn telecharger" download>Télécharger l'audio compressé</a>
+</div>
+{% endblock content %}
