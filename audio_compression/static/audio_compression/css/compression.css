@@ -74,11 +74,7 @@ input[type="radio"] {
 .btn:hover {
     background-color: #56c3a8b5;
 }
-audio {
-    display: block;
-    margin: 1rem 0;
-    width: 100%;
-}
+
 .form-inline {
     display: flex;
     align-items: center;
@@ -92,7 +88,6 @@ audio {
 .form-inline input[type="file"] {
     flex: 1;
 }
-
 .aelect-container {
     display: flex;
     align-items: center;
@@ -115,78 +110,102 @@ audio {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-.format_audio {
-    background-color: #F1BAA1 !important;
-}
-.compression-info-container {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    max-width: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
-    margin: 8px auto;
-}
 
-.compression-info-container h2 {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 12px;
-}
-
-.compression-info-container p {
-    font-size: 1em;
-    color: #555;
-    margin: 8px 0;
-}
-
-.audio-container {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    max-width: 600px;
-    margin: 16px auto;
-    font-family: 'Arial', sans-serif;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.audio-container h2 {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 8px;
-    text-align: center;
-}
-
-.audio-container audio {
-    display: block;
-    margin: 12px auto;
-    width: 100%;
-    max-width: 500px;
-}
 .results {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.compression-info-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+.compression-info-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+.compression-info-container p {
+    font-size: 1.1em;
+    margin: 5px 0;
+}
+
+.audio-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.audio-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+audio {
+    width: 100%;
+    max-width: 600px;
+    margin: 10px 0;
 }
 
 .btn.telecharger {
     display: inline-block;
-    background-color: #AA1803;
-    color: #fff;
-    font-size: 16px;
     padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    text-decoration: none;
+    background-color: #AA1803;
+    color: white;
     text-align: center;
-    cursor: pointer;
+    font-size: 1.2em;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 20px;
     transition: background-color 0.3s ease;
-    margin-bottom: 30px;
 }
 
 .btn.telecharger:hover {
-    background-color: #56c3a8b5;
+    background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+    .results {
+        padding: 15px;
+    }
+    
+    .compression-info-container,
+    .audio-container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .btn.telecharger {
+        width: 100%;
+    }
+}
+.success-message {
+    background-color: #e7f7e7;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #4CAF50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.success-message h2 {
+    color: #4CAF50;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.success-message p {
+    color: #333;
+    font-size: 1.1em;
 }
