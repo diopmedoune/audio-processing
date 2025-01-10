@@ -1,47 +1,79 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Réduction de Bruit Audio</h1>
 
-    <form method="post" enctype="multipart/form-data" class="mt-4">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="audio_file" class="form-label">Choisissez un fichier audio</label>
-            <input type="file" class="form-control" id="audio_file" name="audio_file" required>
+
+    <div class="container">
+        
+        <h1 class="title">Wav Audio Wind Removal</h1>
+        
+        <p class="subtitle">Réduisez le bruit dans vos fichiers audio grâce à des options de traitement avancées.</p>
+        <img src="\static\audio_noise_reduction\img\cap.png" alt="">
+        <form id="audioForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="audioFile">Ajouter un fichier audio :</label>
+                <input type="file" id="audioFile" name="audio_file" required>
+            </div>
+                
+
+            <div class="form-group">
+                <label for="audioFormat">Choisir le format audio :</label>
+                <select id="audioFormat" name="audio_format"  class="rec ">
+                    <option value="wav">WAV</option>
+                    <option value="mp3">MP3</option>
+                    <option value="flac">FLAC</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Débruiter</button>
+        </form>
+
+        <div id="result" class="result" style="display: none;">
+            <h3>Résultats :</h3>
+            <p>Audio Original :</p>
+            <audio id="originalAudio" controls></audio>
+
+            <p>Audio Débruité :</p>
+            <audio id="denoisedAudio" controls></audio>
+
         </div>
-
-        <div class="mb-3">
-            <label for="method" class="form-label">Méthode de réduction de bruit</label>
-            <select class="form-select" id="method" name="method" required>
-                <option value="fft">FFT</option>
-                <option value="adaptive">Filtrage Adaptatif</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Traiter</button>
-    </form>
-
-    {% if original_file_url %}
-    <div class="mt-5">
-        <h3>Fichier Original</h3>
-        <audio controls>
-            <source src="{{ original_file_url }}" type="audio/wav">
-            Votre navigateur ne supporte pas l'élément audio.
-        </audio>
-        <p><a href="{{ original_file_url }}" class="btn btn-secondary" download>Télécharger le fichier original</a></p>
     </div>
-    {% endif %}
 
-    {% if processed_file_url %}
-    <div class="mt-5">
-        <h3>Fichier Traité</h3>
-        <audio controls>
-            <source src="{{ processed_file_url }}" type="audio/wav">
-            Votre navigateur ne supporte pas l'élément audio.
-        </audio>
-        <p><a href="{{ processed_file_url }}" class="btn btn-success" download>Télécharger le fichier traité</a></p>
-    </div>
-    {% endif %}
-</div>
+
+
+    <script>
+      $(document).ready(function () {
+    $('#audioForm').submit(function (e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);  // Récupère les données du formulaire
+
+        // Récupère le token CSRF
+        let csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+
+        $.ajax({
+            url: "{% url 'audio_denoise' %}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRFToken': csrfToken  // Ajoute le token CSRF dans les en-têtes
+            },
+            success: function (response) {
+                $('#result').show();
+                $('#originalAudio').attr('src', response.original_audio_url);
+                $('#denoisedAudio').attr('src', response.denoised_audio_url);
+            },
+            error: function (xhr, status, error) {
+                alert("Une erreur s'est produite lors du traitement de l'audio : " + xhr.responseText);
+            }
+        });
+    });
+});
+
+    </script>
+
+
 {% endblock %}
