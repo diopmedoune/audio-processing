@@ -1,52 +1,29 @@
-from django.http import JsonResponse
 from django.shortcuts import render
-import noisereduce as nr
-import librosa
-import soundfile as sf
+from django.http import JsonResponse
 import os
-from django.conf import settings
-
+from .noise_reduction import fft_filter, wiener_filter
 
 def audio_denoise(request):
     if request.method == 'POST' and request.FILES.get('audio_file'):
-        try:
-            # Récupérer le fichier audio et le format
-            audio_file = request.FILES['audio_file']
-            audio_format = request.POST.get('audio_format', 'wav')
-
-            # Sauvegarder le fichier audio dans le répertoire 'media'
-            media_dir = os.path.join(settings.MEDIA_ROOT, 'audio_files')
-            os.makedirs(media_dir, exist_ok=True)
-            file_path = os.path.join(media_dir, f"temp_audio.{audio_format}")
-            with open(file_path, 'wb') as f:
-                for chunk in audio_file.chunks():
-                    f.write(chunk)
-
-            # Charger et débruiter l'audio
-            y, sr = librosa.load(file_path, sr=None)
-            if y is None or len(y) == 0:
-                raise ValueError("Le fichier audio est vide ou corrompu.")
-
-            y_denoised = nr.reduce_noise(y=y, sr=sr)
-            if y_denoised is None or len(y_denoised) == 0:
-                raise ValueError("La réduction du bruit a échoué ou a produit un résultat vide.")
-
-            # Sauvegarder l'audio débruité dans 'media'
-            denoised_path = os.path.join(media_dir, f"denoised_audio.{audio_format}")
-            sf.write(denoised_path, y_denoised, sr)
-            if not os.path.exists(denoised_path):
-                raise ValueError(f"Le fichier débruité n'a pas pu être écrit à {denoised_path}.")
-
-            # Retourner les résultats avec le chemin relatif
-            return JsonResponse({
-                'original_audio_url': os.path.join(settings.MEDIA_URL, 'audio_files', f"temp_audio.{audio_format}"),
-                'denoised_audio_url': os.path.join(settings.MEDIA_URL, 'audio_files', f"denoised_audio.{audio_format}"),
-            })
-
-        except Exception as e:
-            # En cas d'erreur, retourner un message d'erreur
-            return JsonResponse({'error': str(e)}, status=500)
-
+        audio_file = request.FILES['audio_file']
+        method = request.POST.get('method', 'fft')
+        cutoff_frequency = float(request.POST.get('cutoff_frequency', 1000))
+        window_size = int(request.POST.get('window_size', 11))
+        temp_dir = 'media/temp/'
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+        input_path = os.path.join(temp_dir, audio_file.name)
+        base_name, ext = os.path.splitext(audio_file.name)
+        output_path = os.path.join(temp_dir, f"denoised_{base_name}.wav")
+        with open(input_path, 'wb+') as temp_file:
+            for chunk in audio_file.chunks():
+                temp_file.write(chunk)
+        if method == 'fft':
+            fft_filter(input_path, output_path, cutoff=cutoff_frequency)
+        elif method == 'wiener':
+            wiener_filter(input_path, output_path, window_size=window_size)
+        return JsonResponse({
+            'original_audio_url': f"/{input_path}",
+            'denoised_audio_url': f"/{output_path}"
+        })
     return render(request, 'audio_noise_reduction/noise_reduction.html')
-
-

@@ -1,79 +1,164 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
+<div class="main-content">
     <div class="container">
-        
-        <h1 class="title">Wav Audio Wind Removal</h1>
-        
-        <p class="subtitle">Réduisez le bruit dans vos fichiers audio grâce à des options de traitement avancées.</p>
-        <img src="\static\audio_noise_reduction\img\cap.png" alt="">
+        <h1 class="title">Réduction de Bruit Audio</h1>
         <form id="audioForm" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                <label for="audioFile">Ajouter un fichier audio :</label>
+                <label for="audioFile">Fichier audio :</label>
                 <input type="file" id="audioFile" name="audio_file" required>
             </div>
-                
-
             <div class="form-group">
-                <label for="audioFormat">Choisir le format audio :</label>
-                <select id="audioFormat" name="audio_format"  class="rec ">
-                    <option value="wav">WAV</option>
-                    <option value="mp3">MP3</option>
-                    <option value="flac">FLAC</option>
+                <label for="method">Méthode de débruitage :</label>
+                <select id="method" name="method">
+                    <option value="fft">Filtrage Fréquentiel (FFT)</option>
+                    <option value="wiener">Filtre Wiener</option>
                 </select>
             </div>
-
+            <div class="form-group" id="fft-options">
+                <label for="cutoffFrequency">Fréquence de coupure (FFT) :</label>
+                <input type="number" id="cutoffFrequency" name="cutoff_frequency" value="1000">
+            </div>
+            <div class="form-group" id="wiener-options" style="display: none;">
+                <label for="windowSize">Taille de fenêtre (Wiener) :</label>
+                <input type="number" id="windowSize" name="window_size" value="11">
+            </div>
             <button type="submit" class="btn-submit">Débruiter</button>
         </form>
 
         <div id="result" class="result" style="display: none;">
-            <h3>Résultats :</h3>
+            <h3>Résultats</h3>
             <p>Audio Original :</p>
             <audio id="originalAudio" controls></audio>
-
             <p>Audio Débruité :</p>
             <audio id="denoisedAudio" controls></audio>
-
+            <a id="downloadLink" class="btn-download" href="" download>Télécharger l'Audio Débruité</a>
         </div>
     </div>
+</div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+    }
+
+    .main-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 100px); 
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 600px; 
+        width: 100%;
+        text-align: center;
+    }
+
+    .title {
+        color: #333333;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    label {
+        font-size: 14px;
+        color: #555555;
+    }
+
+    input, select, button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        font-size: 14px;
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        border: none;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    .result {
+        margin-top: 20px;
+    }
+
+    .btn-download {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        color: white;
+        background-color: #AA1803;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .btn-download:hover {
+        background-color: rgba(86, 195, 168, 0.71);
+    }
+</style>
 
 
+<script>
+    const methodSelect = document.getElementById('method');
+    const fftOptions = document.getElementById('fft-options');
+    const wienerOptions = document.getElementById('wiener-options');
 
-    <script>
-      $(document).ready(function () {
-    $('#audioForm').submit(function (e) {
+    methodSelect.addEventListener('change', function () {
+        if (this.value === 'fft') {
+            fftOptions.style.display = 'block';
+            wienerOptions.style.display = 'none';
+        } else if (this.value === 'wiener') {
+            fftOptions.style.display = 'none';
+            wienerOptions.style.display = 'block';
+        }
+    });
+
+    document.getElementById('audioForm').addEventListener('submit', function (e) {
         e.preventDefault();
+        const formData = new FormData(this);
+        const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
-        let formData = new FormData(this);  // Récupère les données du formulaire
-
-        // Récupère le token CSRF
-        let csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
-
-        $.ajax({
-            url: "{% url 'audio_denoise' %}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
+        fetch("{% url 'audio_denoise' %}", {
+            method: "POST",
             headers: {
-                'X-CSRFToken': csrfToken  // Ajoute le token CSRF dans les en-têtes
+                'X-CSRFToken': csrfToken
             },
-            success: function (response) {
-                $('#result').show();
-                $('#originalAudio').attr('src', response.original_audio_url);
-                $('#denoisedAudio').attr('src', response.denoised_audio_url);
-            },
-            error: function (xhr, status, error) {
-                alert("Une erreur s'est produite lors du traitement de l'audio : " + xhr.responseText);
-            }
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('originalAudio').src = data.original_audio_url;
+            document.getElementById('denoisedAudio').src = data.denoised_audio_url;
+            document.getElementById('downloadLink').href = data.denoised_audio_url;
+        })
+        .catch(error => {
+            alert("Erreur lors du traitement de l'audio.");
         });
     });
-});
-
-    </script>
-
-
+</script>
 {% endblock %}
