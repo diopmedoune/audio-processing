@@ -12,4 +12,3 @@ The project is built using Django for the web interface and integrates various a
 - **Abnormal Noise Detection**: Identifies unexpected noise patterns in audio files  
 - **Audio Compression**: Compresses audio files while maintaining quality  
 - **Noise Reduction**: Applies filtering techniques to remove unwanted noise  
-- **Anomaly Detection**: Detects anomalies in audio signals 
